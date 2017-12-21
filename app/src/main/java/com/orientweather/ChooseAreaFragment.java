@@ -84,7 +84,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText = view.findViewById(R.id.title_text);
         backButton = view.findViewById(R.id.back_btn);
         listView = view.findViewById(R.id.list_view);
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, dataList);
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, dataList);
         listView.setAdapter(adapter);
         return view;
     }
@@ -101,12 +101,19 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(i);
                     queryCounties();
-                }else if (currentLevel== LEVEL_COUNTY){
-                    String weatherId= countyList.get(i).getWeatherId();
-                    Intent intent= new Intent(getActivity(),WeatherActivity.class);
-                    intent.putExtra("weather_id",weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId = countyList.get(i).getWeatherId();
+                    if (getActivity() instanceof MainActivity) {
+                        Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                        intent.putExtra("weather_id", weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
+                    } else if (getActivity() instanceof WeatherActivity) {
+                        WeatherActivity weatherActivity = (WeatherActivity) getActivity();
+                        weatherActivity.drawerLayout.closeDrawers();    //关闭drawerLayout
+                        weatherActivity.swipeRefresh.setRefreshing(true);
+                        weatherActivity.requestWeather(weatherId);
+                    }
                 }
 
             }
@@ -162,7 +169,7 @@ public class ChooseAreaFragment extends Fragment {
             currentLevel = LEVEL_CITY;
         } else {
             int provinceCode = selectedProvince.getProvinceCode();
-            String address = "http://guolin.tech/api/china/"+provinceCode;
+            String address = "http://guolin.tech/api/china/" + provinceCode;
             queryFromServer(address, "city");
         }
 
@@ -174,20 +181,20 @@ public class ChooseAreaFragment extends Fragment {
     private void queryCounties() {
         titleText.setText(selectedCity.getCityName());
         backButton.setVisibility(View.VISIBLE);
-        countyList= DataSupport.where("cityid=?", String.valueOf(selectedCity.getId())).find(County.class);
-        if (countyList.size()>0){
+        countyList = DataSupport.where("cityid=?", String.valueOf(selectedCity.getId())).find(County.class);
+        if (countyList.size() > 0) {
             dataList.clear();
             for (County county : countyList) {
                 dataList.add(county.getCountyName());
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
-            currentLevel= LEVEL_COUNTY;
-        }else {
-            int provinceCode= selectedProvince.getProvinceCode();
-            int cityCode= selectedCity.getCityCode();
-            String address="http://guolin.tech/api/china/"+provinceCode+"/"+cityCode;
-            queryFromServer(address,"county");
+            currentLevel = LEVEL_COUNTY;
+        } else {
+            int provinceCode = selectedProvince.getProvinceCode();
+            int cityCode = selectedCity.getCityCode();
+            String address = "http://guolin.tech/api/china/" + provinceCode + "/" + cityCode;
+            queryFromServer(address, "county");
         }
     }
 

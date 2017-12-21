@@ -3,25 +3,34 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize">
 
+    <Button
+        android:id="@+id/nav_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:background="@mipmap/ic_home" />
+
     <TextView
         android:id="@+id/title_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+        android:layout_alignStart="@+id/nav_button"
+        android:layout_marginStart="50dp"
+        android:layout_centerVertical="true"
         android:textColor="#fff"
-        android:textSize="20sp"
-        android:layout_marginStart="10dp"
-        android:layout_centerVertical="true"/>
+        android:textSize="20sp" />
 
     <TextView
-        android:layout_toStartOf="@+id/title_update_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="更新时间："
-        android:textSize="16sp"
-        android:textColor="#fff"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
-        android:layout_centerVertical="true"/>
+        android:layout_toStartOf="@+id/title_update_time"
+        android:text="更新时间："
+        android:textColor="#fff"
+        android:textSize="16sp" />
+
     <TextView
         android:id="@+id/title_update_time"
         android:layout_width="wrap_content"
