@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="5dp"
         android:layout_toStartOf="@+id/title_update_time"
         android:text="更新时间："
         android:textColor="#fff"
