@@ -42,7 +42,14 @@
                     <include layout="@layout/aqi" />
 
                     <include layout="@layout/suggestion" />
+
+                    <TextView
+                        android:id="@+id/location_result"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"/>
                 </LinearLayout>
+
             </ScrollView>
         </android.support.v4.widget.SwipeRefreshLayout>
 

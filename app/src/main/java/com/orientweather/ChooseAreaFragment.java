@@ -1,6 +1,5 @@
 package com.orientweather;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +20,7 @@ import com.orientweather.db.County;
 import com.orientweather.db.Province;
 import com.orientweather.util.HttpUtil;
 import com.orientweather.util.Utility;
+import com.orientweather.util.ViewUtil;
 
 import org.litepal.crud.DataSupport;
 
@@ -41,7 +41,6 @@ public class ChooseAreaFragment extends Fragment {
     public static final int LEVEL_PROVINCE = 0;
     public static final int LEVEL_CITY = 1;
     public static final int LEVEL_COUNTY = 2;
-    private ProgressDialog progressDialog;
     private TextView titleText;
     private Button backButton;
     private ListView listView;
@@ -199,11 +198,11 @@ public class ChooseAreaFragment extends Fragment {
     }
 
     private void queryFromServer(String address, final String type) {
-        showProgressDialog();
+        ViewUtil.showProgressDialog(getContext(),"正在加载...");
         HttpUtil.sendOkHttpRequest(address, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                closeProgressDialog();
+                ViewUtil.closeProgressDialog();
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -227,7 +226,7 @@ public class ChooseAreaFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            closeProgressDialog();
+                            ViewUtil.closeProgressDialog();
                             if ("province".equals(type)) {
                                 queryProvinces();
                             } else if ("city".equals(type)) {
@@ -242,24 +241,4 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
-    /**
-     * 显示进度对话框
-     */
-    private void showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(getContext());
-            progressDialog.setMessage("正在加载...");
-            progressDialog.setCanceledOnTouchOutside(false);
-        }
-        progressDialog.show();
-    }
-
-    /**
-     * 关闭进度对话框
-     */
-    private void closeProgressDialog() {
-        if (progressDialog != null) {
-            progressDialog.dismiss();
-        }
-    }
 }
